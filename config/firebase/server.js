@@ -2,6 +2,7 @@ import fireb from 'firebase-admin';
 import 'firebase/auth';
 
 export const firebase_DB = fireb.apps.length ? 
+
     fireb.app() : 
     fireb.initializeApp({
     credential: fireb.credential.cert({
