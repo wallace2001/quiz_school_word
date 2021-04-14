@@ -20,7 +20,7 @@ export const Login = () => {
         password: yup.string().required('Senha obrigatório'),
     });
     const router = useRouter();
-    const { signIn, auth } = useContext(AuthContext);
+    const { signIn, auth, error } = useContext(AuthContext);
     const {
         values,
         errors,
@@ -54,7 +54,9 @@ export const Login = () => {
                 publishing industries for previewing layouts and visual mockups.
                 </Text>
             </Box>
-
+            <Box>
+                {error.message && <Text marginTop="20px" color="red">Login inválido</Text> }
+            </Box>
             <Box width="100%" marginTop="20px">
                 <FormControl id="email" isRequired>
                     <FormLabel>Email</FormLabel>

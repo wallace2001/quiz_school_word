@@ -70,6 +70,24 @@ const Content = styled.div`
             justify-content: center;
             align-items: center;
         }
+
+        .wrap{
+            padding: 1rem 5rem 1rem 5rem;
+            transition: 0.4s ease-in-out;
+
+            @media screen and (max-width: 1100px){
+                padding: 1rem 2rem 1rem 2rem;
+                transition: 0.4s ease-in-out;
+            }
+
+
+        }
+
+        .wrap_item{
+            @media screen and (max-width: 630px){
+                flex-direction: column;
+            }
+        }
     }
 `;
 
@@ -158,8 +176,8 @@ export const Classfication = () => {
                         {!loadingRanking ? (
                             ranking.map((item, index) => {
                                 return(
-                                    <Wrap p="1rem 5rem 1rem 5rem" key={index}>
-                                    <WrapItem w="100%" d="flex" alignItems="center" justifyContent="space-between" >
+                                    <Wrap className="wrap" key={index}>
+                                    <WrapItem className="wrap_item" w="100%" d="flex" alignItems="center" justifyContent="space-between" >
                                         <Balls bgColor={colorRandom}><p>{index + 1}°</p></Balls>
                                         <Text p={3} fontSize="18px" flex={8}>{item.name}</Text>
                                         <Text flex={1} textAlign="center">{item.score} pontos</Text>

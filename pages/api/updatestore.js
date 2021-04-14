@@ -25,11 +25,16 @@ export default async(req, res) => {
         const sum = score_db + score;
 
         const profiles = await db.collection('profiles').doc(name).update({
-            score: sum
+            score: sum,
+            completed: [
+                {
+                    name: 'iot'
+                }
+            ]
         });
         
         res.send(profiles);
     } catch (error) {
-        res.send(error);
+        res.send({error: "error"});
     }
 }

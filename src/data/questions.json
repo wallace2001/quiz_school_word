@@ -1,7 +1,6 @@
 {
     "questions":[
         {
-            "index": 1,
             "image" : "https://www.aarb.org.br/wp-content/uploads/2019/07/iot-1080x608.jpg",
             "title": "Como acessar a dark web?",
             "answer": "2",
@@ -15,7 +14,6 @@
         },
 
         {
-            "index": 2,
             "image" : "https://inforchannel.com.br/wp-content/uploads/2019/05/Iot.jpg",
             "title": "Como beber agua ?",
             "answer": "1",
@@ -28,8 +26,40 @@
             ]
         },
         {
-            "index": 3,
-            "waiting": true
+            "image" : "https://s2.glbimg.com/GUda5oj9xkd_yQNyn36mDn9XJmo=/620x455/e.glbimg.com/og/ed/f/original/2018/08/17/beber-refrigerante-todos-os-dias-esta-te-matando.jpg",
+            "title": "Como beber refrigerante ?",
+            "answer": "1",
+            "alternatives": [
+                "não sei 1",
+                "não sei 2",
+                "não sei 3",
+                "não sei 4",
+                "não sei 5"
+            ]
+        },
+        {
+            "image" : "https://cdn.dicionariopopular.com/imagens/pai-de-familia-sucodelaranja.jpg",
+            "title": "Como beber suco de laranja ?",
+            "answer": "1",
+            "alternatives": [
+                "não sei 1",
+                "não sei 2",
+                "não sei 3",
+                "não sei 4",
+                "não sei 5"
+            ]
+        },
+        {
+            "image" : "https://cdn.falauniversidades.com.br/wp-content/uploads/2020/08/20171124/hamburguer-1.jpg",
+            "title": "Como comer comida ?",
+            "answer": "1",
+            "alternatives": [
+                "não sei 1",
+                "não sei 2",
+                "não sei 3",
+                "não sei 4",
+                "não sei 5"
+            ]
         }
     ]
 }

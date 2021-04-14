@@ -1,91 +1,20 @@
 // import { Container } from '@chakra-ui/layout'
-import styled from 'styled-components';
 import React, { useContext, useEffect, useState } from 'react'
-import { Header } from '../Header'
 import { useRadio } from '@chakra-ui/radio';
 import { useRadioGroup } from '@chakra-ui/radio';
-import { HStack, Text } from '@chakra-ui/layout';
 import { Box } from '@chakra-ui/layout';
-import { Button } from '@chakra-ui/button';
 import { AuthContext } from '../../providers/provider';
 import { Spinner } from '@chakra-ui/spinner';
 import { useRouter } from 'next/router';
 import { questions } from '../../data/questions.json';
-import { route } from 'next/dist/next-server/server/router';
 import { useToast } from '@chakra-ui/toast';
 import axios from 'axios';
 import { firebase } from '../../../config/firebase/client';
+import { Container, Content } from './styles';
+import { Answers } from '../Answers';
+import { Finsh } from '../Finished';
 
-const Container = styled.div`
-    width: 100%;
-    height: 100%;
-`;
-
-const Content = styled.div`
-    width: 100%;
-    height: 100%;
-
-    margin-top: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    .quiz{
-        width: 60%;
-        height: auto;
-
-        border: 1px solid #ccc;
-        margin-bottom: 20px;
-
-        label{
-            padding: 2.3rem;
-            font-size: 1.4rem;
-        }
-
-        .question{
-            width: 100%;
-            height: auto;
-
-            padding: 5%;
-
-            p{
-                font-size: 1rem;
-                color: #656565;
-            }
-
-            img{
-                margin: 0 auto;
-            }
-        }
-
-        .selection{
-            width: 100%;
-            height: auto;
-
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-
-
-            input{
-                margin-top: 30px;
-            }
-        }
-
-        .button{
-            width: 100%;
-            height: 100%;
-
-            padding: 1rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-    }
-`;
-
-
-const RadioCards = (props) => {
+export const RadioCards = (props) => {
     const { getInputProps, getCheckboxProps } = useRadio(props);
 
     const input = getInputProps();
@@ -125,189 +54,117 @@ const RadioCards = (props) => {
 export const Quiz = () => {
 
     const options = ["1", "2", "3", "4", "5"];
-    const { auth, punt, setPunt } = useContext(AuthContext);
+    const { auth, punt, setPunt, startNewQuiz, quiz, setIndexQuestion, completed, addIndex, indexQuestion } = useContext(AuthContext);
     const [value, setValue] = useState('');
     const [question, setQuestion] = useState(questions);
-    const [results, setResults] = useState([]);
+    const [numberQuestion, setNumberQuestion] = useState(1);
     const [buttonLoading, setButtonLoading] = useState(false);
     const [buttonDisabled, setButtonDisabled] = useState(true);
+    const [indexesQuestion, setIndexesQuestion] = useState();
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isFinished, setIsFinished] = useState(false);
+    
+    const totalQuestions = question.length;
+    const questionIndex = currentIndex;
+    const quest = question[questionIndex];
+    const isCorrect = quest.answer;
+    const router = useRouter();
+    const toast = useToast();
+    
+    useEffect(() => {
+        const fun = async() =>{
+            await !auth.user && router.push('/'); 
+        }
+        startNewQuiz();
+        fun();
+        
+    }, [auth.user]);
+
     const { getRootProps, getRadioProps } = useRadioGroup({
         name: "options",
         defaultValue: '',
         onChange: setValue,
     })
-
-    const totalQuestions = question.length;
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const questionIndex = currentIndex;
-    const quest = question[questionIndex];
-
-    const isCorrect = quest.answer;
-
-    const router = useRouter();
+    
     const group = getRootProps();
 
+    console.log(quiz);
+    console.log(indexQuestion);
+    console.log(indexesQuestion);
+    const condition = Number(indexQuestion) === Number(totalQuestions);
+    
     useEffect(() => {
-        const fun = async() =>{
-            await !auth.user && router.push('/'); 
-        }
+        setIsFinished( () => condition);
+    }, [indexQuestion])
 
-        fun();
-        
-    }, [auth.user]);
-
-
-    const addResult = (result) => {
-        setResults([...results, result]);
-    }
-
-    const toast = useToast();
+    console.log(punt);
 
       const handleSubmitQuiz = () => {
-
-        if(isCorrect === value){
-            setTimeout(() => {
-                const fun = async() => {
-                    await setPunt(punt + 100);
-                    const nextQuestion = questionIndex + 1;
-                
-                    if(nextQuestion < totalQuestions) {
-                        setCurrentIndex(questionIndex + 1);
-                        setValue('');
-                        setButtonLoading(false);
-                    }else{
-                        router.push('/ranking');
-                        const token = await firebase.auth().currentUser.getIdToken();
-                        const uid = await firebase.auth().currentUser.uid;
-                        setButtonLoading(false);
-                        setValue('');
-                        axios.post('/api/updatestore', {score: punt, uid}, {headers: {'authorization': `Bearer ${token}`}}).then();
-    
-                      }
-                }
-
+          
+          if(isCorrect === value){
+              setTimeout(() => {
+                  setPunt(punt + 100);
+                  const fun = async() => {
+                      const nextQuestion = questionIndex + 1;
+                      if(nextQuestion < totalQuestions) {
+                          setCurrentIndex(questionIndex + 1);
+                          setValue('');
+                        }else{
+                            setValue('');
+                            
+                        }
+                    }
+                    
                 fun();
-            }, 2 * 1000);
-        }else{
-            setTimeout(() => {
-                const fun = async() => {
-                    setPunt(punt);
-                    const nextQuestion = questionIndex + 1;
-                
-                    if(nextQuestion < totalQuestions) {
-                        setCurrentIndex(questionIndex + 1);
-                        setButtonLoading(false);
-                        setValue('');
-                    }else{
-                        router.push('/ranking');
-                        const token = await firebase.auth().currentUser.getIdToken();
-                        const uid = await firebase.auth().currentUser.uid;
-                        setButtonLoading(false);
-                        setValue('');
-                        axios.post('/api/updatestore', {score: punt, uid}, {headers: {'authorization': `Bearer ${token}`}}).then();
-    
-                      }
+                }, 2 * 1000);
+    }else{
+        setTimeout(() => {
+            setPunt(punt);
+            const fun = async() => {
+                const nextQuestion = questionIndex + 1;
+                if(nextQuestion < totalQuestions) {
+                    setCurrentIndex(questionIndex + 1);
+                    setValue('');
+                }else{
+                    setValue('');
+                    
                 }
+            }
+            
+            fun();
+        }, 2 * 1000);
+    }
+          
+          setTimeout(() => {
+            addIndex(indexQuestion);
+            setNumberQuestion(indexQuestion + 1);
+            setButtonLoading(false);
 
-                fun();
-            }, 2 * 1000);
-        }
 
+        }, 2*1000);
 
       }
 
+      console.log(isFinished);
+      console.log(completed);
+
     return (
         !auth.loading ? (
-        <Container>
-            <Header />
-            <Content>
-                {quest ? (
-                    quest.index === questions.length ? (
-                        <Box w="40%" d="flex" flexDirection="column" justifyContent="center">
-                            <Box m="0 auto">
-                                <img src="/logo.png" alt="logo" style={{width: '300px', height: '300px'}} />
-                            </Box>
-                            <Box>
-                                <Text textAlign="center">Você respondeu todas as perguntas, clique em finalizar para ver o resultado e sua classificação.</Text>
-                            </Box>
-                            <Button marginTop="40px" onClick={() => {
-                                handleSubmitQuiz();
-                                setButtonLoading(true);
-                                }}isLoading={buttonLoading}>Finalizar</Button>
-                        </Box>
-                    ) :
-                    <div className="quiz">
-                    <label>
-                        Questão {quest.index}
-                    </label>
-                    <div style={{ width: '100%', height: '1px', border: '1px solid #ccc'}}></div>
-
-                    <div className="question">
-                        <p>{quest.title}</p>
-                        <img src={quest.image} style={{width: '150px', height: '150px'}} />
-                    </div>
-
-                    <div className="selection">
-                        <HStack {...group} onClick={() => {
-                            setButtonLoading(false);
-                            setButtonDisabled(false);
-                        }} display="flex" flexDirection="row" flexWrap="wrap" justifyContent="center" alignItems="flex-start">
-                            {options.map((value, index) => {
-                                const radio = getRadioProps({ value })
-                                return(
-                                    <RadioCards key={value} {...radio}>
-                                        <h4>{value}) {quest.alternatives[index]}</h4>
-                                    </RadioCards>
-                                );
-                            })}
-                        </HStack>
-                    </div>
-                    <div className="button">
-                        <Button colorScheme="orange" onClick={() => {
-                            setButtonLoading(true);
-
-                            if(value === ''){
-                                toast({
-                                    title: "Escolha uma alternativa",
-                                    status: "warning",
-                                    duration: 1000,
-                                    isClosable: true,
-                                })
-                            }
-
-                            else if(isCorrect === value){
-                                handleSubmitQuiz();
-                                toast({
-                                    title: "Acertou",
-                                    status: "success",
-                                    duration: 1000,
-                                    isClosable: true,
-                                })
-                            }else{
-                                handleSubmitQuiz();
-                                toast({
-                                    title: "Errou",
-                                    status: "error",
-                                    duration: 1000,
-                                    isClosable: true,
-                                })
-                            }
-                            }} isLoading={buttonLoading}
-                                disabled={buttonDisabled}
-                            >Responder</Button>
-                    </div>
-                </div>
-                ) : (
+            quest ? (
+                <>
+                {isFinished || completed[0].name === 'iot' ? (
+                        <Finsh buttonLoading={buttonLoading} setIndexQuestion={setIndexQuestion} setButtonLoading={setButtonLoading} handleSubmitQuiz={handleSubmitQuiz} />
+                    ) : (
+                        <Answers punt={punt} setNumberQuestion={setNumberQuestion} numberQuestion={numberQuestion} isCorrect={isCorrect} value={value} toast={toast} handleSubmitQuiz={handleSubmitQuiz} quest={quest} options={options} buttonLoading={buttonLoading} buttonDisabled={buttonDisabled} getRadioProps={getRadioProps} group={group} group={group} indexQuestion={indexQuestion} quest={quest} options={options} setButtonLoading={setButtonLoading} setButtonDisabled={setButtonDisabled} setIndexesQuestion={setIndexesQuestion} />
+                    )}
+                </>) : (
                     <Spinner
                     thickness="4px"
                     speed="0.65s"
                     color="orange"
                     size="xl"
                     />
-                )}
-
-            </Content>
-        </Container>
+                )
         ) : (
             <Box w="100%" h="100vh" d="flex" justifyContent="center" alignItems="center">
             <Spinner

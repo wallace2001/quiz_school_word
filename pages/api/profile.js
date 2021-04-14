@@ -12,6 +12,11 @@ export default async(req, res) => {
     userId: user_id,
     name,
     score: 0,
+    completed: [
+      {
+        name: ''
+      }
+    ]
   });
 
   res.send(user);

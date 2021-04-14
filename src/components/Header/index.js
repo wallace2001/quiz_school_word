@@ -21,7 +21,7 @@ const Container = styled.div`
     width: 100%;
     height: 60px;
 
-    padding: 1rem 20% 1rem 20%;
+    padding: 1rem 10% 1rem 10%;
     background-color: red;
 `;
 
@@ -52,8 +52,8 @@ export const Header = () => {
     return (
             <Container>
             <Content>
-                <div style={{width: '90px', height: '90px'}}>
-                    <img src="/logo.png" alt="logo"/>
+                <div style={{width: '140px', height: '40px', display: 'flex', alignItems: 'center', cursor: 'pointer'}} onClick={() => router.push('/menu')}>
+                    <img src="/quiz.png" alt="logo"/>
                 </div>
 
                 <div className="profile">

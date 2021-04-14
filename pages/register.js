@@ -4,6 +4,6 @@ import { Register } from '../src/components/Register'
 export default function Home(){
     return (
         <Register />
-    )
+    );
 }
 
