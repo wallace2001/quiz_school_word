@@ -2,13 +2,13 @@ import fireb from 'firebase/app';
 import 'firebase/auth';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAZnIbWbwhi9mEJ5F0Fz4nSGk1mSDpDS9E",
-    authDomain: "quiz-b16a3.firebaseapp.com",
-    projectId: "quiz-b16a3",
-    storageBucket: "quiz-b16a3.appspot.com",
-    messagingSenderId: "992681385124",
-    appId: "1:992681385124:web:4e49abf1ab34fdbfe29a31",
-    measurementId: "G-7H0RNMCSVV"
+    apiKey: process.env.NEXT_PUBLIC_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_APP_ID,
+    measurementId: process.env.NEXT_PUBLIC_MEASUREMENT_ID
   };
   export const firebase = fireb.apps.length ? fireb.app() : fireb.initializeApp(firebaseConfig);
 
