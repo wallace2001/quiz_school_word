@@ -29,9 +29,9 @@ export const AuthProvider = ({children}) => {
 
     useEffect(() => {
         const fun = async() =>{
-            firebase.auth().onAuthStateChanged(user_id => {
+            await firebase.auth().onAuthStateChanged(user_id => {
                 const user = user_id;
-                 axios ({
+                 await axios ({
                     method: 'POST',
                     url: '/api/profilenow',
                     data: {user}
