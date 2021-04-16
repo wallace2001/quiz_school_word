@@ -147,13 +147,15 @@ export const Ranking = () => {
             }, 2 * 1000);
 
             }
-            if(!auth.loading) {
-                auth.user ? router.push('/ranking') : router.push('/') ;
-            }
-            
             fun();
 
     },[]);
+
+    useEffect(() => {
+        if(!auth.loading) {
+            auth.user ? router.push('/ranking') : router.push('/') ;
+        }
+    }, []);
 
     useEffect(() => {
         setTimeout(() => {
