@@ -126,6 +126,14 @@ export const Classfication = () => {
     }, 2 * 1000);
 
     useEffect(() => {
+        setPunt(0);
+        if(!auth.loading) {
+            auth.user ? router.push('/classfication') : router.push('/') ;
+          }
+        
+    }, [auth.user]);
+
+    useEffect(() => {
         const fun = async() => {
             await axios ({
                 method: 'GET',
@@ -135,9 +143,6 @@ export const Classfication = () => {
                 setRanking(res.data)
             });
         }
-            if(!auth.loading) {
-                auth.user ? router.push('/classfication') : router.push('/') ;
-              }
             
             fun();
 
