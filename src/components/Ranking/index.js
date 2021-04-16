@@ -136,7 +136,6 @@ export const Ranking = () => {
     useEffect(() => {
         const fun = async() => {
             setTimeout(() => {
-
                 axios ({
                     method: 'GET',
                     url: '/api/score',
@@ -147,17 +146,13 @@ export const Ranking = () => {
             }, 2 * 1000);
 
             }
+            setPunt(0);
+            if(!auth.loading) {
+                auth.user ? router.push('/ranking') : router.push('/') ;
+              }
             fun();
 
-    },[]);
-
-    useEffect(() => {
-        setPunt(0);
-        if(!auth.loading) {
-            auth.user ? router.push('/ranking') : router.push('/') ;
-          }
-        
-    }, [auth.user]);
+    },[auth.user]);
 
     useEffect(() => {
         setTimeout(() => {
