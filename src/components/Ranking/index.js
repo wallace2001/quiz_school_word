@@ -152,10 +152,12 @@ export const Ranking = () => {
     },[]);
 
     useEffect(() => {
+        setPunt(0);
         if(!auth.loading) {
-            auth.user ? router.push('/ranking') : router.push('/') ;
-        }
-    }, []);
+            auth.user ? router.push('/menu') : router.push('/') ;
+          }
+        
+    }, [auth.user]);
 
     useEffect(() => {
         setTimeout(() => {
