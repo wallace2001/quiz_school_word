@@ -21,6 +21,7 @@ export const AuthProvider = ({children}) => {
     const [name, setName] = useState('');
     const [completed, setCompleted] = useState('');
     const [puntuation, setPuntuation] = useState('');
+    const [change, setChange] = useState(0);
     const router = useRouter();
 
     // setTimeout(() => {
@@ -45,13 +46,13 @@ export const AuthProvider = ({children}) => {
                     setAuth({
                         loading: false,
                         user: user_id
-                    })
-                })
-            })
+                    });
+                });
+            });
         }
 
         fun();
-    }, [indexQuestion]);
+    }, [indexQuestion, auth.user, change]);
 
     const signIn = async({email, password}) => {
         firebase.auth().setPersistence(persistentMode);
@@ -86,6 +87,7 @@ export const AuthProvider = ({children}) => {
                     'Authorization': `Bearer ${token}`
                 }
             }).then(res => {
+                setChange(change + 1);
                 router.push('/menu');
             });
         } catch (error) {
