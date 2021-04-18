@@ -120,7 +120,7 @@ export const Balls = styled.div`
 export const Ranking = () => {
 
     const [loading, setLoading] = useState(true);
-    const { punt, auth, name } = useContext(AuthContext);
+    const { punt, setPunt, auth, name } = useContext(AuthContext);
     const [ranking, setRanking] = useState([]);
     const [colorRandom, setColorRandom] = useState(`#${(Math.random()*0xFFFFFF<<0).toString(16)}`);
     const [counterTimer, setCounterTimer] = useState(0);

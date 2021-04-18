@@ -135,7 +135,6 @@ export const Classfication = () => {
                 setRanking(res.data)
             });
         }
-            setPunt(0);
             if(!auth.loading) {
                 auth.user ? router.push('/classfication') : router.push('/') ;
             }
